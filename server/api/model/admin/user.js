@@ -1,10 +1,11 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
  
-var loginSchema = new Schema({
+var userSchema = new Schema({
     name: {
         type: String,
-        require: true
+        require: true,
+	    unique: true
     },
     pwd: {
         type: String,
@@ -12,5 +13,4 @@ var loginSchema = new Schema({
     }
 });
  
- 
-module.exports = mongoose.model('Login',loginSchema,'hello');//hello为对应的表名
+module.exports = mongoose.model('User',userSchema,'hello');//hello为对应的集合名

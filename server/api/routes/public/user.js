@@ -1,0 +1,12 @@
+'use strict';
+var express = require('express');
+var queryUser = require('../../controller/public/query');
+var addUser = require('../../controller/public/add');
+var deleteUser = require('../../controller/public/delete');
+var modifyUser = require('../../controller/public/modify');
+var router = express.Router();
+router.get('/query',queryUser.query);
+router.get('/add',addUser.add);
+router.get('/delete',deleteUser.delete);
+router.get('/modify',modifyUser.modify);
+module.exports = router;

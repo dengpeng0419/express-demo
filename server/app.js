@@ -11,11 +11,11 @@ var usersRouter = require('./routes/users');
 var loginRouter = require('./routes/login');
 
 require('./api/model/db');
-var login = require('./api/routes/public/login');
+var user = require('./api/routes/public/user');
 
 var app = express();
 
-app.use('/api/login',login);
+app.use('/api/user',user);
 
 app.use(cors({
     origin:['http://localhost:8080'],
