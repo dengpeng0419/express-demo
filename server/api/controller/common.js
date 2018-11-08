@@ -30,5 +30,12 @@ var common = {
 		resultJson.resultMsg= msg;
 		return res.json(resultJson);
 	},
+	transferJson(arr) {
+		var list = {};
+		for (var key in arr) {
+			list[key] = arr[key];
+		}
+		return list;
+	}
 };
 module.exports = common;

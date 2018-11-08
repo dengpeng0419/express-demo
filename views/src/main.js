@@ -3,10 +3,13 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import axios from 'axios'  //引入
+import {get, post} from './utils/http'
+import qs from 'qs'
 
-Vue.prototype.$axios = axios;
-axios.defaults.baseURL = 'http://localhost:3000';
+Vue.prototype.$qs = qs;
+
+Vue.prototype.$get = get;
+Vue.prototype.$post = post;
 
 Vue.config.productionTip = false
 
@@ -17,3 +20,4 @@ new Vue({
   components: { App },
   template: '<App/>'
 })
+

@@ -3,7 +3,8 @@ var mongoose = require('mongoose');
 var common = require('../common');
 var User = mongoose.model('User');
 module.exports.delete = function(req,res) {
-	var userName = req.query.name;
+	var userName = req.body.name;
+
 	User.remove({'name':userName},function(err,data) {
 		if (err) {
 			common.sendResponse(res, 500, err);

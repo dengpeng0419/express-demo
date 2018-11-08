@@ -10,7 +10,21 @@ var userSchema = new Schema({
     pwd: {
         type: String,
         require: true
-    }
+    },
+	createTime: {
+		type: Date,
+		default: Date.now
+	},
+	updateTime: {
+		type: Date,
+		default: Date.now
+	}
+}, {
+	versionKey: false,
+	timestamps: {
+	    createdAt: 'createTime',
+        updatedAt: 'updateTime'
+	}
 });
  
 module.exports = mongoose.model('User',userSchema,'hello');//hello为对应的集合名
