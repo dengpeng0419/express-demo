@@ -1,23 +1,17 @@
 var createError = require('http-errors');
 var express = require('express');
+var app = express();
 var path = require('path');
+var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var bodyParser = require('body-parser');
 var cors = require('cors');
-require('./api/model/db');
-var jwt    = require('jsonwebtoken'); // 使用jwt签名
-var config = require('./config'); // 引入配置
 var session = require('express-session');
-
-var app = express();
+require('./api/model/db');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
-
-// 设置superSecret 全局参数
-app.set('superSecret', config.jwtsecret);
 
 // 使用 morgan 将请求日志输出到控制台
 app.use(logger('dev'));
@@ -38,7 +32,7 @@ app.use(session({
 	secret: 'keyboard cat',
 	resave: true,
 	saveUninitialized: true,
-	cookie: { domain: 'http://localhost:3000', httpOnly: false, secure: false } //secure: true的时候
+	cookie: { secure: false } //secure: true的时候
 }))
 
 app.use(cors({
@@ -47,22 +41,15 @@ app.use(cors({
 	allowHeaders:['Content-type', 'Authorization']
 }),)
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var loginRouter = require('./routes/login');
+var routers = require('./api/routes/index');
+var auth = require('./api/controller/login/auth');
 
-var user = require('./api/routes/public/user');
-var verify = require('./api/routes/common/auth')
+app.use('/api/login', routers);
 
-app.use('/api/login',user);
+// 除了登录接口，其他接口都需要认证
+app.use('/api', auth);
 
-app.use('/api/user', verify);
-
-app.use('/api/user',user);
-
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/login', loginRouter);
+app.use('/api', routers);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

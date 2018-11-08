@@ -2,9 +2,9 @@ var express = require('express');
 var router = express.Router();
 var app = express();
 var jwt = require('jsonwebtoken'); // 使用jwt签名
-var config = require('../../../config'); // 引入配置
+var secret = require('../../config/jwt').jwtsecret; // 引入配置
 // 设置superSecret 全局参数
-app.set('superSecret', config.jwtsecret);
+app.set('superSecret', secret);
 
 router.use(function(req, res, next) {
 	// 拿取token 数据 按照自己传递方式写
@@ -16,16 +16,16 @@ router.use(function(req, res, next) {
 			if (err) {
 				return res.json({ success: false, message: '无效的token.' });
 			} else if(global.TOKEN != token) {
-		        console.log(global.TOKEN, token)
-		        return res.json({ success: false, message: 'token不正确' });
-		    }else {
+				console.log(global.TOKEN, token)
+				return res.json({ success: false, message: '非正常登录' });
+			}else {
 				// 如果验证通过，在req中写入解密结果
 				req.decoded = decoded;
 				//console.log(decoded);
 				next(); //继续下一步路由
 			}
-		
-		
+			
+			
 		});
 	} else {
 		// 没有拿到token 返回错误
