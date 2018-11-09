@@ -10,9 +10,8 @@ var app = express();
 app.set('superSecret', secret);
 
 // 用户授权路径，返回JWT 的 Token 验证用户名密码
-module.exports.login = function(req,res) {
+module.exports.logout = function(req,res) {
 	var userName = req.body.name;
-	var pwd = req.body.pwd;
 	
 	User.findOne({
 		name: userName
@@ -20,8 +19,6 @@ module.exports.login = function(req,res) {
 		if (err) throw err;
 		if (!user) {
 			common.sendJsonResponse(res, 200, {notFound: true});
-		} else if (user.pwd != pwd) {
-			common.sendJsonResponse(res, 200, {secretError: true});
 		} else {
 			//var token = jwt.sign(user.toJSON(), app.get('superSecret'), {
 			var token = jwt.sign({name: user.name}, app.get('superSecret'), {
@@ -30,11 +27,8 @@ module.exports.login = function(req,res) {
 			
 			global.TOKEN = token;
 			// console.log(global.TOKEN)
-
-			var obj ={
-				token: token
-			};
-			common.sendJsonResponse(res, 200, obj);
+			
+			common.sendJsonResponse(res, 200);
 		}
 	});
 }

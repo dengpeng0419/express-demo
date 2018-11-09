@@ -68,11 +68,14 @@ export function post(options) {
         console.log(body);
         //这里可以做一层粗粒度的拦截（仅做参考）
         if(res.status==200 && body){
-            // if(body.code == 401 && options.url.indexOf('/login') > 0){
-            //     this.$message({message:'您输入的用户名或密码错误，请重新输入！',type:'warning'})
-            // }
+            if(body.resultCode === -5) {
+                this.$router.push({
+                    name: 'Login'
+                })
+                return;
+            }
     
-            options.success(body)
+            options.success(body);
             // if(body.code==500){
             //     this.$message({message:body.msg + '，请联系管理员！',type:'warning'})
             // }

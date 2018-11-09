@@ -8,6 +8,7 @@ var deleteUser = require('../controller/user/delete');
 var modifyUser = require('../controller/user/modify');
 
 var login = require('../controller/login/login');
+var logout = require('../controller/login/logout');
 
 router.post('/user/query',queryUser.query);
 router.post('/user/add',addUser.add);
@@ -15,5 +16,6 @@ router.post('/user/delete',deleteUser.delete);
 router.post('/user/modify',modifyUser.modify);
 
 router.post('/login',login.login);
+router.post('/logout',logout.logout);
 
 module.exports = router;

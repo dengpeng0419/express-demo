@@ -2,11 +2,11 @@
     <div class="page-usermenu">
         <h1>用户列表</h1>
         <div class="model-control">
-            <input type="text" placeholder="输入用户名" v-model="inputName"/>
+            <input type="text" class="nameValue" placeholder="输入用户名" v-model="inputName"/>
             <div class="user-add" @click="addUser">添加</div>
             <div class="user-add" @click="findUser">查询</div>
             <div class="user-add" @click="updatePage">刷新</div>
-            <div class="user-add" @click="login">登录</div>
+            <div class="user-add" @click="logout">注销</div>
         </div>
         <table>
             <tr>
@@ -35,10 +35,11 @@
         data() {
             return {
                 userList: [],
-                inputName: ''
+                inputName: '',
             }
         },
         mounted() {
+            this.userName = this.$route.query.userName;
             this.updateUser();
         },
         methods: {
@@ -112,26 +113,17 @@
             updatePage() {
                 this.updateUser();
             },
-            login() {
-                if(!this.inputName) {
-                    alert('用户名不能为空！');
-                    return;
-                }
+            logout() {
                 this.$post({
-                    url: '/api/login/login',
+                    url: '/api/logout',
                     data: {
-                        name: this.inputName
+                        name: this.userName
                     },
-                    success: data => {
-                        if (data.resultCode === 0) {
-                            //config.token = data.resultData.token;
-                            sessionStorage.setItem('tk', data.resultData.token);
-                            //console.log(sessionStorage.getItem('tk'))
-                            if(data.resultMsg.code ===1 ) {
-                                alert('该用户已存在！');
-                            } else {
-                                this.updateUser();
-                            }
+                    success: json => {
+                        if (json.resultCode === 0) {
+                            this.$router.push({
+                                name: 'Login'
+                            })
                         }
                     }
                 })
@@ -159,7 +151,7 @@
        padding-left: 15px;
        padding-right: 15px;
     }
-    input {
+    .nameValue {
         height: 30px;
         width: 180px;
         border: 1px solid #ccc;
