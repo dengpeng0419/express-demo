@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var app = express();
-var common = require('../common');
+var response = require('../../common/response');
 var jwt = require('jsonwebtoken'); // 使用jwt签名
 var secret = require('../../config/jwt').jwtsecret; // 引入配置
 // 设置superSecret 全局参数
@@ -20,7 +20,7 @@ router.use(function(req, res, next) {
 	redisClient.hget("roban:demo:hset", userName, function(err,response){
 		if(err) {
 			console.log('redis获取数据失败', err);
-			common.sendErrorResponse(res, 500);
+			response.sendErrorResponse(res, 500);
 			return;
 		}
 		console.log('redis token got.');
@@ -31,16 +31,14 @@ router.use(function(req, res, next) {
 		if (token) {
 			// 解码 token (验证 secret 和检查有效期（exp）)
 			jwt.verify(token, app.get('superSecret'), function(err, decoded) {
-				console.log(token)
-				console.log(redisToken)
 				if (err) {
 					//无效的token
 					console.log('无效的token');
-					common.loginErrorResponse(res, 200, {message: '请重新登录.'});
+					response.loginErrorResponse(res, 200, {message: '请重新登录.'});
 				} else if(redisToken != token) {
 					//token不相同
 					console.log('token不相同');
-					common.loginErrorResponse(res, 200, {message: '请重新登录.'});
+					response.loginErrorResponse(res, 200, {message: '请重新登录.'});
 				}else {
 					// 如果验证通过，在req中写入解密结果
 					req.decoded = decoded;
@@ -50,7 +48,7 @@ router.use(function(req, res, next) {
 			});
 		} else {
 			// 没有拿到token 返回错误
-			common.loginErrorResponse(res, 200, {message: '请先登录.'});
+			response.loginErrorResponse(res, 200, {message: '请先登录.'});
 			// return res.status(403).send({
 			// 	success: false,
 			// 	message: '请先登录.'

@@ -1,6 +1,6 @@
 'use strict';
 var mongoose = require('mongoose');
-var common = require('../common');
+var response = require('../../common/response');
 var User = mongoose.model('User');
 var jwt    = require('jsonwebtoken'); // 使用jwt签名
 var secret = require('../../config/jwt').jwtsecret; // 引入配置
@@ -18,7 +18,7 @@ module.exports.logout = function(req,res) {
 	}, function(err, user) {
 		if (err) throw err;
 		if (!user) {
-			common.sendJsonResponse(res, 200, {notFound: true});
+			response.sendJsonResponse(res, 200, {notFound: true});
 		} else {
 			//var token = jwt.sign(user.toJSON(), app.get('superSecret'), {
 			var token = jwt.sign({name: user.name}, app.get('superSecret'), {
@@ -28,7 +28,7 @@ module.exports.logout = function(req,res) {
 			global.TOKEN = token;
 			// console.log(global.TOKEN)
 			
-			common.sendJsonResponse(res, 200);
+			response.sendJsonResponse(res, 200);
 		}
 	});
 }

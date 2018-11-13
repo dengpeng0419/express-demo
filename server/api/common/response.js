@@ -1,5 +1,4 @@
 'use strict'
-var multer = require('multer')
 var common = {
 	sendResponse: function(res,status,resultJson) {
 		res.header('Access-Control-Allow-Origin', '*');
@@ -8,14 +7,13 @@ var common = {
 		res.status(status);
 		return res.json(resultJson);
 	},
-    sendJsonResponse: function(res,status,json={},msg={}) {
-        const resultJson = {};
-        resultJson.resultData = json;
-        resultJson.resultCode = 0;
-        resultJson.resultMsg= msg;
-	    this.sendResponse(res,status,resultJson);
-    },
-    
+	sendJsonResponse: function(res,status,json={},msg={}) {
+		const resultJson = {};
+		resultJson.resultData = json;
+		resultJson.resultCode = 0;
+		resultJson.resultMsg= msg;
+		this.sendResponse(res,status,resultJson);
+	},
 	sendErrorResponse: function(res,status,json={},msg={}) {
 		const resultJson = {};
 		resultJson.resultData = json;

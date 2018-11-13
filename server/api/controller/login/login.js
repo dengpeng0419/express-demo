@@ -1,6 +1,6 @@
 'use strict';
 var mongoose = require('mongoose');
-var common = require('../common');
+var response = require('../../common/response');
 var User = mongoose.model('User');
 var jwt    = require('jsonwebtoken'); // 使用jwt签名
 var secret = require('../../config/jwt').jwtsecret; // 引入配置
@@ -22,9 +22,9 @@ module.exports.login = function(req,res) {
 	}, function(err, user) {
 		if (err) throw err;
 		if (!user) {
-			common.sendJsonResponse(res, 200, {notFound: true});
+			response.sendJsonResponse(res, 200, {notFound: true});
 		} else if (user.pwd != pwd) {
-			common.sendJsonResponse(res, 200, {secretError: true});
+			response.sendJsonResponse(res, 200, {secretError: true});
 		} else {
 			//var token = jwt.sign(user.toJSON(), app.get('superSecret'), {
 			var token = jwt.sign({name: user.name}, app.get('superSecret'), {
@@ -34,7 +34,7 @@ module.exports.login = function(req,res) {
 			redisClient.hset("roban:demo:hset", user.name, token, function(err,response){
 				if(err) {
 					console.log('redis数据存储失败', err);
-					common.sendErrorResponse(res, 500);
+					response.sendErrorResponse(res, 500);
 					return;
 				}
 				console.log('redis token saved.');
@@ -44,7 +44,7 @@ module.exports.login = function(req,res) {
 			var obj ={
 				token: token
 			};
-			common.sendJsonResponse(res, 200, obj);
+			response.sendJsonResponse(res, 200, obj);
 		}
 	});
 }

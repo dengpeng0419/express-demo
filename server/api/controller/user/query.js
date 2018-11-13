@@ -1,6 +1,6 @@
 'use strict';
 var mongoose = require('mongoose');
-var common = require('../common');
+var response = require('../../common/response');
 var User = mongoose.model('User');
 
 module.exports.query = function(req,res) {
@@ -21,14 +21,14 @@ module.exports.query = function(req,res) {
     // var userName = req.query.name;
     // User.find({name:{$regex:/dengpeng/i}},null,function(err,data) {
         if (err) {
-            common.sendErrorResponse(res, 500, error);
+            response.sendErrorResponse(res, 500, error);
             return;
         } else if(data.length === 0) {
-	        common.sendJsonResponse(res, 200, {});
+	        response.sendJsonResponse(res, 200, {});
         } else {
         	var obj = {};
         	obj.list = data;
-	        common.sendJsonResponse(res, 200, obj);
+	        response.sendJsonResponse(res, 200, obj);
         }
     })
 }
