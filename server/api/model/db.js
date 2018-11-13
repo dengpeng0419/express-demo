@@ -17,7 +17,7 @@ if(process.platform === 'win32') {
 mongoose.connect(dbURL);
  
 mongoose.connection.on('connected',function() {
-    console.log('Mongoose connected to ' + dbURL);
+    console.log('===============Mongoose connected to ' + dbURL);
 });
  
 mongoose.connection.on('error',function(err) {

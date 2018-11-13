@@ -3,11 +3,17 @@ var express = require('express');
 var app = express();
 var path = require('path');
 var bodyParser = require('body-parser');
+var redis = require("./api/common/redis");
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require('cors');
 var session = require('express-session');
+
+//链接mongoose
 require('./api/model/db');
+//链接redis
+//var	client = redis.createClient();
+redis.connectRedis();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -34,6 +40,20 @@ app.use(session({
 	saveUninitialized: true,
 	cookie: { secure: false } //secure: true的时候
 }))
+
+// client.on("error", function (err) {
+// 	console.log("Error " + err);
+// });
+//
+// client.hset("roban:demo:hset","today","fine",function(err,response){
+// 	console.log(err,response);
+// });
+// client.hget("roban:demo:hset","today",function(err,response){
+// 	console.log(err,response);
+// });
+// client.hgetall("roban:demo:hset",function(err,response){
+// 	console.log(err,response);
+// });
 
 app.use(cors({
 	origin:['http://localhost:8080'],

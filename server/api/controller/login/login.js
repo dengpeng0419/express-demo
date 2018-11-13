@@ -9,6 +9,9 @@ var app = express();
 // 设置superSecret 全局参数
 app.set('superSecret', secret);
 
+var redis = require('../../common/redis');
+var redisClient = redis.getRedisClient();
+
 // 用户授权路径，返回JWT 的 Token 验证用户名密码
 module.exports.login = function(req,res) {
 	var userName = req.body.name;
@@ -28,7 +31,14 @@ module.exports.login = function(req,res) {
 				expiresIn : 60*10 // 授权时效（秒）
 			});
 			
-			global.TOKEN = token;
+			redisClient.hset("roban:demo:hset", user.name, token, function(err,response){
+				if(err) {
+					console.log('redis数据存储失败', err);
+					common.sendErrorResponse(res, 500);
+					return;
+				}
+				console.log('redis token saved.');
+			});
 			// console.log(global.TOKEN)
 
 			var obj ={

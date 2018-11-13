@@ -40,7 +40,7 @@
         },
         mounted() {
             this.userName = this.$route.query.userName;
-            this.updateUser();
+            this.updateUser(this.userName);
         },
         methods: {
             addUser() {
