@@ -2,20 +2,26 @@
 var express = require('express');
 var router = express.Router();
 
-var queryUser = require('../controller/user/query');
-var addUser = require('../controller/user/add');
-var deleteUser = require('../controller/user/delete');
-var modifyUser = require('../controller/user/modify');
+var queryUser = require('../controller/user/query').query;
+var addUser = require('../controller/user/add').add;
+var deleteUser = require('../controller/user/delete').delete;
+var modifyUser = require('../controller/user/modify').modify;
 
-var login = require('../controller/login/login');
-var logout = require('../controller/login/logout');
+var login = require('../controller/login/login').login;
+var logout = require('../controller/login/logout').logout;
 
-router.post('/user/query',queryUser.query);
-router.post('/user/add',addUser.add);
-router.post('/user/delete',deleteUser.delete);
-router.post('/user/modify',modifyUser.modify);
+var userListInit = require('../controller/userList/init').init;
+var userListQuery = require('../controller/userList/query').query;
 
-router.post('/login',login.login);
-router.post('/logout',logout.logout);
+router.post('/user/query', queryUser);
+router.post('/user/add', addUser);
+router.post('/user/delete', deleteUser);
+router.post('/user/modify', modifyUser);
+
+router.post('/login', login);
+router.post('/logout', logout);
+
+router.post('/userlist/init', userListInit);
+router.post('/userlist/query', userListQuery);
 
 module.exports = router;

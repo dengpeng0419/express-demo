@@ -33,6 +33,8 @@
 </template>
 
 <script>
+    const md5 = require('js-md5');
+
 	export default {
 		name: "login",
         data() {
@@ -41,11 +43,6 @@
                 secretValue: '',
                 remindWords: ''
             }
-        },
-        created() {
-            // this.$router.push({
-            //     name: 'UserMenu'
-            // })
         },
         mounted() {
 
@@ -71,7 +68,7 @@
                     url: '/api/login/login',
                     data: {
                         name: this.nameValue,
-                        pwd: this.secretValue
+                        pwd: md5(this.nameValue + this.secretValue)
                     },
                     success: json => {
                         if (json.resultCode === 0) {
@@ -84,11 +81,9 @@
                                 this.remindWords = '用户名或者密码错误！';
                             } else {
                                 sessionStorage.setItem('tk', data.token);
+                                sessionStorage.setItem('pin', this.nameValue);
                                 this.$router.push({
-                                    name: 'UserMenu',
-                                    query: {
-                                        userName: this.nameValue
-                                    }
+                                    name: 'UserMenu'
                                 })
                             }
                         }

@@ -3,7 +3,7 @@
         <h1>用户列表</h1>
         <div class="model-control">
             <input type="text" class="nameValue" placeholder="输入用户名" v-model="inputName"/>
-            <div class="user-add" @click="addUser">添加</div>
+            <div v-if="add" class="user-add" @click="addUser">添加</div>
             <div class="user-add" @click="findUser">查询</div>
             <div class="user-add" @click="updatePage">刷新</div>
             <div class="user-add" @click="logout">注销</div>
@@ -15,7 +15,7 @@
                 <td>用户名</td>
                 <td>创建时间</td>
                 <td>最近登陆时间</td>
-                <td>操作</td>
+                <td v-if="del">操作</td>
             </tr>
             <tr v-for="(item, index) in userList">
                 <td>{{index + 1}}</td>
@@ -23,7 +23,7 @@
                 <td>{{item.name}}</td>
                 <td>{{item.createTime}}</td>
                 <td>{{item.updateTime}}</td>
-                <td style="color: #f00;" @click="deleteUser(item.name)">x</td>
+                <td v-if="del" style="color: #f00;" @click="deleteUser(item.name)">x</td>
             </tr>
         </table>
     </div>
@@ -34,15 +34,31 @@
         name: 'usermenu',
         data() {
             return {
+                del: false,
+                add: false,
                 userList: [],
                 inputName: '',
             }
         },
         mounted() {
-            this.userName = this.$route.query.userName;
-            this.updateUser(this.userName);
+            this.initPage();
         },
         methods: {
+            initPage() {
+                this.$post({
+                    url:'/api/userlist/init',
+                    success: (data) => {
+                        if(data.resultCode === 0) {
+                            this.del = data.resultData.delete;
+                            this.add = data.resultData.add;
+                            this.userList = data.resultData.list;
+                        }
+                    },
+                    error: err => {
+
+                    }
+                })
+            },
             addUser() {
                 if(!this.inputName) {
                     alert('用户名不能为空！');
@@ -71,18 +87,16 @@
                 }
                 this.updateUser(this.inputName);
             },
-            updateUser(userName) {
-                let data = {};
-                if(userName) {
-                    data.name = userName;
-                }
+            updateUser() {
                 this.$post({
-                    url:'/api/user/query',
+                    url:'/api/userlist/query',
                     data:{
-                        name:userName,
+                        name:this.inputName,
                     },
                     success: (data) => {
                         if(data.resultCode === 0) {
+                            this.del = data.resultData.delete;
+                            this.add = data.resultData.add;
                             this.userList = data.resultData.list;
                         }
                     },
@@ -111,7 +125,7 @@
                 }
             },
             updatePage() {
-                this.updateUser();
+                this.initPage();
             },
             logout() {
                 this.$post({

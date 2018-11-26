@@ -49,11 +49,10 @@ export function post(options) {
     if(!options.error) {
         options.error = () => {};
     }
-    
     axios({
         url: options.url,
         method: 'post',
-        data: options.data,
+        data: Object.assign({}, {loginName: sessionStorage.getItem('pin')}, options.data),
         //如果请求中要用到 token 则在 header中
         headers: {
             //token 存储方式因人而异

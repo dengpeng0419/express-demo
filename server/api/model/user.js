@@ -2,6 +2,9 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var userSchema = new Schema({
+	_id: {
+		type: String
+	},
 	name: {
 		type: String,
 		require: true,
@@ -10,6 +13,10 @@ var userSchema = new Schema({
 	pwd: {
 		type: String,
 		require: true
+	},
+	role: {
+		type: Number,
+		ref: 'Role'
 	},
 	createTime: {
 		type: Date,
@@ -27,4 +34,19 @@ var userSchema = new Schema({
 	}
 });
 
-module.exports = mongoose.model('User',userSchema,'hello');//hello为对应的集合名
+// 连表查询方法
+userSchema.statics = {
+	// findRoleByUser:function(userId, callback) {
+	// 	console.log(userId, callback)
+	// 	return this.findOne({id: userId})
+	// 		.populate({
+	// 			path: 'Role'
+	// 		})
+	// 		.exec(callback)
+	// 	// return this
+	// 	// 	.findOne({id: userId}).populate('id')  // 关联查询
+	// 	// 	.exec(callback)
+	// }
+}
+
+module.exports = mongoose.model('User', userSchema, 'user');//第三个参数为对应的集合名

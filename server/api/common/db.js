@@ -54,7 +54,7 @@ module.exports.connectDB = () => {
 		});
 	});
 	
-	require('../model/user');
+	require('../model');
 }
 
 

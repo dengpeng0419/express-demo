@@ -48,7 +48,7 @@ app.use(cors({
 }),)
 
 var routers = require('./api/routes/index');
-var auth = require('./api/controller/login/auth');
+var auth = require('./api/controller/common/auth');
 
 app.use('/api/login', routers);
 

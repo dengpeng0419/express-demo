@@ -14,11 +14,11 @@ var redisClient = redis.getRedisClient();
 
 // 用户授权路径，返回JWT 的 Token 验证用户名密码
 module.exports.login = function(req,res) {
-	var userName = req.body.name;
+	var loginName = req.body.loginName;
 	var pwd = req.body.pwd;
 	
 	User.findOne({
-		name: userName
+		name: loginName
 	}, function(err, user) {
 		if (err) throw err;
 		if (!user) {
@@ -30,14 +30,14 @@ module.exports.login = function(req,res) {
 			var token = jwt.sign({name: user.name}, app.get('superSecret'), {
 				expiresIn : 60*10 // 授权时效（秒）
 			});
-			
+
 			redisClient.hset("roban:demo:hset", user.name, token, function(err,response){
 				if(err) {
 					console.log('redis数据存储失败', err);
 					response.sendErrorResponse(res, 500);
 					return;
 				}
-				console.log('redis token saved.');
+				console.log('redis token saved.', response);
 			});
 			// console.log(global.TOKEN)
 

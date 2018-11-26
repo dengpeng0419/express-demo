@@ -14,16 +14,16 @@ router.use(function(req, res, next) {
 	// 拿取token 数据 按照自己传递方式写
 	//var token = req.body.token || req.query.token || req.headers['x-access-token'];
 	var token = req.headers['x-access-token'];
-	var userName = req.body.name;
-	
+	var loginName = req.body.loginName;
+
 	//redisClient.hgetall("roban:demo:hset",function(err,response){
-	redisClient.hget("roban:demo:hset", userName, function(err,response){
+	redisClient.hget("roban:demo:hset", loginName, function(err,response){
 		if(err) {
 			console.log('redis获取数据失败', err);
 			response.sendErrorResponse(res, 500);
 			return;
 		}
-		console.log('redis token got.');
+		console.log('redis token got.', response);
 		verifyJWT(response);
 	});
 	
