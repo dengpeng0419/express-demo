@@ -64,10 +64,11 @@
                     this.remindWords = '密码不能为空！';
                     return;
                 }
+                sessionStorage.setItem('pin', this.nameValue);
                 this.$post({
                     url: '/api/login/login',
                     data: {
-                        name: this.nameValue,
+                        //name: this.nameValue,
                         pwd: md5(this.nameValue + this.secretValue)
                     },
                     success: json => {
@@ -81,7 +82,6 @@
                                 this.remindWords = '用户名或者密码错误！';
                             } else {
                                 sessionStorage.setItem('tk', data.token);
-                                sessionStorage.setItem('pin', this.nameValue);
                                 this.$router.push({
                                     name: 'UserMenu'
                                 })

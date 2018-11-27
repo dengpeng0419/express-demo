@@ -42,7 +42,7 @@ app.use(session({
 }))
 
 app.use(cors({
-	origin:['http://localhost:8080'],
+	origin:['http://localhost:8090'],
 	methods:['GET', 'POST'],
 	allowHeaders:['Content-type', 'Authorization']
 }),)

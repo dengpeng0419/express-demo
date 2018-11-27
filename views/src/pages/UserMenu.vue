@@ -23,7 +23,7 @@
                 <td>{{item.name}}</td>
                 <td>{{item.createTime}}</td>
                 <td>{{item.updateTime}}</td>
-                <td v-if="del" style="color: #f00;" @click="deleteUser(item.name)">x</td>
+                <td v-if="del" style="color: #f00;" @click="deleteUser(item.name)"><span v-if="index">x</span></td>
             </tr>
         </table>
     </div>
@@ -55,7 +55,9 @@
                         }
                     },
                     error: err => {
-
+                        this.$router.replace({
+                            name: 'Login'
+                        });
                     }
                 })
             },
@@ -65,7 +67,7 @@
                     return;
                 }
                 this.$post({
-                    url: '/api/user/add',
+                    url: '/api/userlist/addUser',
                     data: {
                         name: this.inputName
                     },
@@ -74,7 +76,7 @@
                             if(data.resultMsg.code ===1 ) {
                                 alert('该用户已存在！');
                             } else {
-                                this.updateUser();
+                                this.initPage();
                             }
                         }
                     }
@@ -109,13 +111,13 @@
                 const ensure = confirm("是否要删除用户"+name+"？")
                 if (ensure) {
                     this.$post({
-                        url:'/api/user/delete',
+                        url:'/api/userlist/deleteUser',
                         data:{
                             name:name,
                         },
                         success: (data) => {
                             if(data.resultCode === 0) {
-                                this.updateUser();
+                                this.initPage();
                             }
                         },
                         error: err => {
@@ -135,6 +137,8 @@
                     },
                     success: json => {
                         if (json.resultCode === 0) {
+                            sessionStorage.removeItem('pin');
+                            sessionStorage.removeItem('tk');
                             this.$router.push({
                                 name: 'Login'
                             })
