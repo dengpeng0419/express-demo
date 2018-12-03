@@ -13,16 +13,16 @@
                 <td>编号</td>
                 <td>用户id</td>
                 <td>用户名</td>
+                <td>角色</td>
                 <td>创建时间</td>
-                <td>最近登陆时间</td>
                 <td v-if="del">操作</td>
             </tr>
             <tr v-for="(item, index) in userList">
                 <td>{{index + 1}}</td>
                 <td>{{item._id}}</td>
                 <td>{{item.name}}</td>
+                <td>{{item.role === 1 ? 'admin' : 'guest'}}</td>
                 <td>{{item.createTime}}</td>
-                <td>{{item.updateTime}}</td>
                 <td v-if="del" style="color: #f00;" @click="deleteUser(item.name)"><span v-if="index">x</span></td>
             </tr>
         </table>

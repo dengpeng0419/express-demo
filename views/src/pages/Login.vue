@@ -1,7 +1,7 @@
 <template>
     <div class="page-login">
         <div class="title">梦奇系统<span class="vice-title">欢迎登录</span></div>
-        <div class="content">
+        <div class="content" :style="{'backgroud-color': backgroudColor}">
             <div class="mq-logo">
                 <div class="mq"></div>
             </div>
@@ -14,7 +14,7 @@
                 </div>
                 <div class="form-secret">
                     <label for="secret" class="secret-label"></label>
-                    <input id="secret" class="secret-input" :value="secretValue" @input="secretInput" placeholder="密码">
+                    <input id="secret" type="password" class="secret-input" :value="secretValue" @input="secretInput" placeholder="密码">
                 </div>
                 <div class="forget">忘记密码</div>
                 <div class="submit" @click="submit">登 录</div>
@@ -41,7 +41,8 @@
 		    return {
                 nameValue: '',
                 secretValue: '',
-                remindWords: ''
+                remindWords: '',
+                backgroudColor: 'lightseagreen'
             }
         },
         mounted() {

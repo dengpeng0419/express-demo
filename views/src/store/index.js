@@ -1,16 +1,16 @@
 import Vue from 'vue'
-import 'es6-promise/auto'
 import Vuex from 'vuex'
+import cart from './modules/cart'
+import products from './modules/products'
 
 Vue.use(Vuex)
 
-const store = new Vuex.Store({
-    state: {
-        count: 0
+const debug = process.env.NODE_ENV !== 'production';
+
+export default new Vuex.Store({
+    modules: {
+        cart,
+        products
     },
-    mutations: {
-        increment (state) {
-            state.count++
-        }
-    }
+    strict: debug
 })
