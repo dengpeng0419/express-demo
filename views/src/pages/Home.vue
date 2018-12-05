@@ -1,7 +1,7 @@
 <template>
     <div class="home-frame">
         <div class="top-frame">
-            <div class="title" :style="{'background-color': backgroudColor}">LOGO</div>
+            <div class="home-title" :style="{'background-color': backgroudColor}">LOGO</div>
             <div class="top-menu">
                 <div class="main-menu">
                     <el-menu mode="horizontal" :text-color="backgroudColor" @select="handleSelect">
@@ -19,19 +19,18 @@
                             </el-submenu>
                         </el-submenu>
                         <el-menu-item index="3" disabled>菜单三</el-menu-item>
-                        <el-menu-item index="4" class="menu-item">菜单四</el-menu-item>
                     </el-menu>
                 </div>
                 <div class="other-menu">
                     <div class="change-color">
                         <el-switch
                             v-model="switchOpen"
-                            active-color="orangered"
+                            active-color="darkorange"
                             inactive-color="lightseagreen"
                             @change="changeColor">
                         </el-switch>
                     </div>
-                    <div class="logout">注销</div>
+                    <div class="logout" @click="$router.push({name: 'login'})">注销</div>
                 </div>
             </div>
         </div>
@@ -60,16 +59,20 @@
 </template>
 
 <script>
-	export default {
+    import { mapState, mapActions } from 'vuex';
+
+    export default {
 		name: "home",
         data() {
             return {
                 activeIndex: '1',
                 activeIndex2: '1',
                 switchOpen: true,
-                backgroudColor: 'lightseagreen'
             };
         },
+        computed: mapState({
+            backgroudColor: state => state.home.backgroudColor
+        }),
         methods: {
             handleSelect(key, keyPath) {
                 console.log(key, keyPath);
@@ -82,9 +85,9 @@
             },
             changeColor() {
                 if(this.switchOpen) {
-                    this.backgroudColor = 'lightseagreen';
+                    this.$store.dispatch('home/setBackgroundColor', 'lightseagreen');
                 } else {
-                    this.backgroudColor = 'orangered';
+                    this.$store.dispatch('home/setBackgroundColor', 'darkorange');
                 }
             }
         }
@@ -106,7 +109,7 @@
         display: flex;
         border-bottom: 1px #eee solid;
     }
-    .title {
+    .home-title {
         width: 200px;
         height: 66px;
         line-height: 66px;
@@ -127,36 +130,31 @@
         display: flex;
     }
     .change-color {
-        width: 200px;
         height: 66px;
         display: flex;
         justify-content: center;
         align-items: center;
+        margin-right: 40px;
     }
     .logout {
-        width: 100px;
         height: 66px;
         line-height: 66px;
+        margin-right: 40px;
     }
 
     .menu-item {
         height: 100%;
         line-height: 66px;
     }
-    .menu-item .el-submenu__title {
-        height: 100%;
-        line-height: 66px;
-    }
-    .el-menu-item.is-active {
-        color: #000;
-    }
-    .submenu-item .el-submenu__title {
-        height: 100%;
-        line-height: 66px;
-        padding-right: 40px;
-    }
+
+    /*总菜单栏下划线*/
     .el-menu.el-menu--horizontal {
         border: none;
+    }
+    /*单个菜单选中时下划线*/
+    .el-menu--horizontal>.el-menu-item, .el-menu--horizontal>.el-menu-item.is-active{
+        border: none;
+        color: lightseagreen !important;
     }
 
     .left-frame {

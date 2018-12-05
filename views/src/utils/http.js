@@ -1,5 +1,4 @@
 import axios from "axios/index";
-import data from "./data";
 
 axios.defaults.timeout = 30000;
 axios.defaults.baseURL = 'http://localhost:3000';

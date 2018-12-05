@@ -1,12 +1,12 @@
 <template>
     <div class="page-login">
         <div class="title">梦奇系统<span class="vice-title">欢迎登录</span></div>
-        <div class="content" :style="{'backgroud-color': backgroudColor}">
+        <div class="content" :style="{'background-color': backgroudColor}">
             <div class="mq-logo">
                 <div class="mq"></div>
             </div>
             <div class="login-form">
-                <div class="login-tab">用户登录</div>
+                <div class="login-tab" :style="{'color': backgroudColor}">用户登录</div>
                 <div class="login-remind">{{remindWords}}</div>
                 <div class="form-name">
                     <label for="loginname" class="login-label"></label>
@@ -17,14 +17,14 @@
                     <input id="secret" type="password" class="secret-input" :value="secretValue" @input="secretInput" placeholder="密码">
                 </div>
                 <div class="forget">忘记密码</div>
-                <div class="submit" @click="submit">登 录</div>
+                <div class="submit" :style="{'background-color': backgroudColor}" @click="submit">登 录</div>
                 <div class="register">
                     <div class="other-icon">
                         <a class="pdl"><b class="QQ-icon"></b><span>QQ</span></a>
                         <span class="line">|</span>
                         <a class="pdl"><b class="weixin-icon"></b><span>微信</span></a>
                     </div>
-                    <div class="regist-link">立即注册</div>
+                    <div class="regist-link" :style="{'color': backgroudColor}">立即注册</div>
                 </div>
             </div>
         </div>
@@ -34,6 +34,7 @@
 
 <script>
     const md5 = require('js-md5');
+    import { mapState, mapActions } from 'vuex';
 
 	export default {
 		name: "login",
@@ -42,9 +43,12 @@
                 nameValue: '',
                 secretValue: '',
                 remindWords: '',
-                backgroudColor: 'lightseagreen'
+                //backgroudColor: 'lightseagreen'
             }
         },
+        computed: mapState({
+            backgroudColor: state => state.home.backgroudColor
+        }),
         mounted() {
 
         },
@@ -122,7 +126,7 @@
         position: relative;
         width: 100%;
         height: 480px;
-        background-color: lightseagreen;
+        //background-color: darkorange;
     }
     .mq-logo {
         position: relative;
@@ -169,7 +173,7 @@
         text-align: center;
         border-bottom: 1px solid #eee;
         background: #fff;
-        color: lightseagreen;
+        //color: lightseagreen;
     }
     .login-remind {
         margin-top: 10px;
@@ -234,7 +238,7 @@
     .submit {
         margin-top: 20px;
         margin-left: 36px;
-        background-color: lightseagreen;
+        //background-color: lightseagreen;
         color: #fff;
         height: 32px;
         width: 280px;
@@ -296,7 +300,7 @@
         background-position: -20px 0;
     }
     .regist-link {
-        color: lightseagreen;
+        //color: lightseagreen;
     }
     .footer {
         font-size: 14px;
