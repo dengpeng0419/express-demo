@@ -30,6 +30,8 @@
 </template>
 
 <script>
+    import Cookie from '../utils/cookie';
+
     export default {
         name: 'usermenu',
         data() {
@@ -137,10 +139,12 @@
                     },
                     success: json => {
                         if (json.resultCode === 0) {
-                            sessionStorage.removeItem('pin');
-                            sessionStorage.removeItem('tk');
+                            Cookie.delCookie('pin');
+                            Cookie.delCookie('tk');
+                            // sessionStorage.removeItem('pin');
+                            // sessionStorage.removeItem('tk');
                             this.$router.push({
-                                name: 'Login'
+                                name: 'login'
                             })
                         }
                     }

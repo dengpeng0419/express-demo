@@ -1,4 +1,5 @@
 import axios from "axios/index";
+import Cookie from "./cookie";
 
 axios.defaults.timeout = 30000;
 axios.defaults.baseURL = 'http://localhost:3000';
@@ -51,11 +52,11 @@ export function post(options) {
     axios({
         url: options.url,
         method: 'post',
-        data: Object.assign({}, {loginName: sessionStorage.getItem('pin')}, options.data),
+        data: Object.assign({}, {loginName: Cookie.getCookie('pin')}, options.data),
         //如果请求中要用到 token 则在 header中
         headers: {
             //token 存储方式因人而异
-            'x-access-token': sessionStorage.getItem('tk'),
+            'x-access-token': Cookie.getCookie('tk'),
         },
             // transformRequest:[function (fData, headers) {
         //     headers['Content-Type']='application/json'
@@ -63,7 +64,7 @@ export function post(options) {
         // }],
     }).then(res => {
         let body = res.data
-        console.log(body);
+        console.log("<pre>" + JSON.stringify(body, null, 4) + "</pre>");
         //这里可以做一层粗粒度的拦截（仅做参考）
         if(res.status==200 && body){
             if(body.resultCode === -5) {

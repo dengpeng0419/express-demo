@@ -35,6 +35,7 @@
 <script>
     const md5 = require('js-md5');
     import { mapState, mapActions } from 'vuex';
+    import Cookie from '../utils/cookie';
 
 	export default {
 		name: "login",
@@ -69,7 +70,8 @@
                     this.remindWords = '密码不能为空！';
                     return;
                 }
-                sessionStorage.setItem('pin', this.nameValue);
+                Cookie.setCookie('pin', this.nameValue, 0.1);
+                //sessionStorage.setItem('pin', this.nameValue);
                 this.$post({
                     url: '/api/login/login',
                     data: {
@@ -86,9 +88,10 @@
                             if(data.secretError) {
                                 this.remindWords = '用户名或者密码错误！';
                             } else {
-                                sessionStorage.setItem('tk', data.token);
+                                Cookie.setCookie('tk', data.token, 0.1);
+                                //sessionStorage.setItem('tk', data.token);
                                 this.$router.push({
-                                    name: 'UserMenu'
+                                    name: 'userMenu'
                                 })
                             }
                         }
@@ -311,6 +314,9 @@
     @media screen and (max-width: 1200px) {
         .mq-logo {
             display: none;
+        }
+        .login-form {
+            right: 400px;
         }
     }
 </style>

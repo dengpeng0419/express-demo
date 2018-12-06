@@ -4,7 +4,8 @@
             <div class="home-title" :style="{'background-color': backgroudColor}">LOGO</div>
             <div class="top-menu">
                 <div class="main-menu">
-                    <el-menu mode="horizontal" :text-color="backgroudColor" @select="handleSelect">
+                    <el-menu mode="horizontal" :text-color="backgroudColor" @select="handleSelect"
+                             :active-text-color="backgroudColor">
                         <el-menu-item index="1" class="menu-item">菜单一</el-menu-item>
                         <el-submenu index="2" class="submenu-item">
                             <template slot="title">菜单二</template>
@@ -34,38 +35,54 @@
                 </div>
             </div>
         </div>
-        <div class="left-frame">
-            <el-menu default-active="1" class="el-menu-left" @open="handleOpen" @close="handleClose"
-                     background-color="#545c64" text-color="#fff" :active-text-color="backgroudColor">
-                <el-menu-item index="1">
-                    <i class="el-icon-location left-item-left"></i>
-                    <span slot="title" class="left-item-right">导航一</span>
-                </el-menu-item>
-                <el-menu-item index="2">
-                    <i class="el-icon-menu left-item-left"></i>
-                    <span slot="title" class="left-item-right">导航二</span>
-                </el-menu-item>
-                <el-menu-item index="3" disabled>
-                    <i class="el-icon-document left-item-left"></i>
-                    <span slot="title" class="left-item-right">导航三</span>
-                </el-menu-item>
-                <el-menu-item index="4">
-                    <i class="el-icon-setting left-item-left"></i>
-                    <span slot="title" class="left-item-right">导航四</span>
-                </el-menu-item>
-            </el-menu>
+        <div class="bottom-frame">
+            <div class="left-frame">
+                <el-menu default-active="1" class="el-menu-left" @open="handleOpen" @close="handleClose" @select="handleSelect"
+                         background-color="#545c64" text-color="#fff" :active-text-color="backgroudColor">
+                    <el-menu-item index="1">
+                        <i class="el-icon-location left-item-left"></i>
+                        <span slot="title" class="left-item-right">导航一</span>
+                    </el-menu-item>
+                    <el-menu-item index="2">
+                        <i class="el-icon-menu left-item-left"></i>
+                        <span slot="title" class="left-item-right">导航二</span>
+                    </el-menu-item>
+                    <el-menu-item index="3" disabled>
+                        <i class="el-icon-document left-item-left"></i>
+                        <span slot="title" class="left-item-right">导航三</span>
+                    </el-menu-item>
+                    <el-menu-item index="4">
+                        <i class="el-icon-setting left-item-left"></i>
+                        <span slot="title" class="left-item-right">导航四</span>
+                    </el-menu-item>
+                </el-menu>
+            </div>
+            <div class="right-frame">
+                <nav1 v-show="activeNav === '1'"></nav1>
+                <nav2 v-show="activeNav === '2'"></nav2>
+                <nav4 v-show="activeNav === '4'"></nav4>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
-    import { mapState, mapActions } from 'vuex';
+    import {mapState, mapActions} from 'vuex';
+    import Nav1 from './Nav1';
+    import Nav2 from './Nav2';
+    import Nav4 from './Nav4';
+    import Cookie from '../utils/cookie';
 
     export default {
 		name: "home",
+        components: {
+            Nav1,
+            Nav2,
+            Nav4,
+        },
         data() {
             return {
-                activeIndex: '1',
+                activeNav: '1',
                 activeIndex2: '1',
                 switchOpen: true,
             };
@@ -73,8 +90,12 @@
         computed: mapState({
             backgroudColor: state => state.home.backgroudColor
         }),
+        mounted() {
+            console.log(Cookie.getCookie('_ga'));
+        },
         methods: {
             handleSelect(key, keyPath) {
+                this.activeNav = key;
                 console.log(key, keyPath);
             },
             handleOpen(key, keyPath) {
@@ -101,6 +122,7 @@
         width:100%;
         display: flex;
         flex-direction: column;
+        background-color: #eee;
     }
     .top-frame {
         box-sizing: border-box;
@@ -108,13 +130,13 @@
         height: 66px;
         display: flex;
         border-bottom: 1px #eee solid;
+        background-color: #fff;
     }
     .home-title {
         width: 200px;
         height: 66px;
         line-height: 66px;
         text-align: center;
-
         color: #fff;
         font-size: 30px;
         font-weight: bold;
@@ -153,13 +175,19 @@
     }
     /*单个菜单选中时下划线*/
     .el-menu--horizontal>.el-menu-item, .el-menu--horizontal>.el-menu-item.is-active{
-        border: none;
-        color: lightseagreen !important;
+        border: none !important;
+    }
+    .el-submenu__title {
+        border: none !important;
     }
 
+    .bottom-frame {
+        flex: 1;
+        display: flex;
+    }
     .left-frame {
         width: 200px;
-        flex: 1;
+        height: 100%;
     }
     .el-menu-left {
         height: 100%;
@@ -169,5 +197,11 @@
     }
     .left-item-left {
         margin-left: 20px;
+    }
+
+    .right-frame {
+        margin: 10px;
+        background-color: #fff;
+        flex: 1;
     }
 </style>
