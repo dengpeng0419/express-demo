@@ -2,7 +2,8 @@
     <div id="editor">
         <div class="ed-submit">
             <el-input placeholder="请输入标题" v-model="input"></el-input>
-            <div class="submit-btn" :style="{'background-color': backgroudColor}" @click="showContent">提交</div>
+            <div class="submit-btn" :style="{'background-color': backgroudColor, 'margin-left': '2px'}" @click="reset">重置</div>
+            <div class="submit-btn" :style="{'background-color': backgroudColor, 'margin-left': '2px'}" @click="sureSubmit">确认修改</div>
         </div>
         <mavon-editor class="ed-frame" style="height: 100%" v-model="article" :boxShadow="false"></mavon-editor>
         <!--<div class="markdown-body" v-html="content">1111</div>-->
@@ -15,10 +16,10 @@
     import marked from 'marked';
     import {mapState} from 'vuex';
 
-	export default {
-		name: "addArticle",
+    export default {
+        name: "addArticle",
         data() {
-		    return {
+            return {
                 article: '',
                 content: '',
                 input: '',
@@ -31,10 +32,10 @@
             mavonEditor
         },
         mounted() {
-		    console.log(this.article);
+            console.log(this.article);
         },
         methods: {
-            showContent() {
+            sureSubmit() {
                 this.content = marked(this.article);
                 if(!this.article || !this.input) {
                     this.$alert('标题或内容不能为空', {
@@ -48,9 +49,12 @@
                     });
                 }
                 console.log(this.content);
-            }
+            },
+            reset() {
+
+            },
         }
-	}
+    }
 </script>
 
 <style scoped>

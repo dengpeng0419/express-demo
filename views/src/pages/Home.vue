@@ -37,11 +37,13 @@
         </div>
         <div class="bottom-frame">
             <div class="left-frame">
-                <el-menu default-active="1" class="el-menu-left" @open="handleOpen" @close="handleClose" @select="handleSelect"
+                <el-menu :default-active="activeNav" class="el-menu-left" @open="handleOpen" @close="handleClose" @select="handleSelect"
                          background-color="#545c64" text-color="#fff" :active-text-color="backgroudColor">
                     <el-menu-item index="1">
                         <i class="el-icon-location left-item-left"></i>
-                        <span slot="title">{{navTitle[0]}}</span>
+                        <span slot="title">
+                            <router-link tag="span" to="/home">{{navTitle[0]}}</router-link>
+                        </span>
                     </el-menu-item>
                     <el-submenu index="2">
                         <template slot="title">
@@ -50,25 +52,30 @@
                         </template>
                         <el-menu-item-group>
                             <template slot="title" class="hide"></template>
-                            <el-menu-item index="1-1" class="left-group-left">{{navTitle[2]}}</el-menu-item>
-                            <el-menu-item index="1-2" class="left-group-left">{{navTitle[3]}}</el-menu-item>
+                            <el-menu-item index="1-1" class="left-group-left">
+                                <router-link tag="div" to="/home/addArticle">{{navTitle[2]}}</router-link>
+                            </el-menu-item>
+                            <el-menu-item index="1-2" class="left-group-left">
+                                <router-link tag="div" to="/home/pageList">{{navTitle[3]}}</router-link>
+                            </el-menu-item>
+                            <el-menu-item index="1-3" class="left-group-left">
+                                <router-link tag="div" to="/home/editArticle">{{navTitle[4]}}</router-link>
+                            </el-menu-item>
                         </el-menu-item-group>
                     </el-submenu>
                     <el-menu-item index="3">
                         <i class="el-icon-document left-item-left"></i>
-                        <span slot="title">{{navTitle[4]}}</span>
+                        <span slot="title">{{navTitle[5]}}</span>
                     </el-menu-item>
                     <el-menu-item index="4" disabled>
                         <i class="el-icon-setting left-item-left"></i>
-                        <span slot="title">{{navTitle[5]}}</span>
+                        <span slot="title">{{navTitle[6]}}</span>
                     </el-menu-item>
                 </el-menu>
             </div>
             <div class="right-frame">
                 <div class="content-title">{{curTitle}}</div>
-                <TotalData v-show="activeNav === '1'"></TotalData>
-                <AddArticle v-show="activeNav === '1-1'"></AddArticle>
-                <nav4 v-show="activeNav === '4'"></nav4>
+                <router-view></router-view>
             </div>
         </div>
     </div>
@@ -78,7 +85,8 @@
     import {mapState, mapActions} from 'vuex';
     import AddArticle from './AddArticle';
     import TotalData from './TotalData';
-    import Nav4 from './Nav4';
+    import PageList from './PageList';
+    import EditArticle from './EditArticle';
     import Cookie from '../utils/cookie';
 
     export default {
@@ -86,36 +94,56 @@
         components: {
             AddArticle,
             TotalData,
-            Nav4,
+            PageList,
+            EditArticle,
         },
         data() {
             return {
                 activeNav: '1',
                 activeIndex2: '1',
                 switchOpen: true,
-                navTitle: ['导航一','导航二','标题一','标题二','导航三','导航四']
+                navTitle: ['主页','页面管理','新建页面','页面列表','修改页面','用户列表','导航']
             };
         },
         computed: {
 		    curTitle: function () {
+                this.$store.dispatch('home/recordChosenNar', this.activeNav);
 		        switch(this.activeNav) {
                     case '1': return this.navTitle[0]; break;
                     case '2': return this.navTitle[1]; break;
                     case '1-1': return this.navTitle[2]; break;
                     case '1-2': return this.navTitle[3]; break;
-                    case '3': return this.navTitle[4]; break;
-                    case '4': return this.navTitle[5]; break;
+                    case '1-3': return this.navTitle[4]; break;
+                    case '3': return this.navTitle[5]; break;
+                    case '4': return this.navTitle[6]; break;
                     default: return ''; break;
                 }
             },
 		    ...mapState({
-                backgroudColor: state => state.home.backgroudColor
+                backgroudColor: state => state.home.backgroudColor,
+                settingNar: state => state.home.settingNar,
+            })
+        },
+        created() {
+            window.addEventListener("beforeunload", ()=>{
+                console.log('c', JSON.stringify(this.$store.state.home))
+                localStorage.setItem("settingMsg", JSON.stringify(this.$store.state.home));
             })
         },
         mounted() {
             console.log(Cookie.getCookie('_ga'));
+            if(localStorage.getItem("settingMsg") && localStorage.getItem("settingMsg") != '{}') {
+                const settings = JSON.parse(localStorage.getItem("settingMsg"));
+                this.activeNav = settings.settingNar;
+                this.backgroundColor = settings.backgroundColor;
+                this.initSetting(settings);
+            }
         },
         methods: {
+		    initSetting(settings) {
+                this.$store.dispatch('home/recordChosenNar', settings.settingNar);
+                this.$store.dispatch('home/setBackgroundColor', settings.backgroudColor);
+            },
             handleSelect(key, keyPath) {
                 this.activeNav = key;
                 console.log(key, keyPath);
@@ -133,7 +161,7 @@
                     this.$store.dispatch('home/setBackgroundColor', 'darkorange');
                 }
             }
-        }
+        },
 	}
 </script>
 
@@ -239,7 +267,7 @@
         line-height: 40px;
         background-color: #fff;
         margin: 15px;
-        padding-left: 10px;
+        padding-left: 15px;
         font-size: 14px;
         color: #666;
         font-weight: bold;
